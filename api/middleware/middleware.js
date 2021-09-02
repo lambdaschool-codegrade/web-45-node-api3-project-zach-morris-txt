@@ -6,33 +6,38 @@ const User = require('../users/users-model')
 //Middleware
 function logger(req, res, next) {
   // DO YOUR MAGIC
+  const timestamp = new Date().toLocaleString()
+  const method = req.method
+  const url = req.originalUrl
   console.log(`
-    Method: ${req.method},
-    URL: ${req.url},
-    Timestamp: ${req.timestamp}
+    Method: ${method},
+    URL: ${url},
+    Timestamp: ${timestamp}
   `)
   next()
 }
 
-function validateUserId(req, res, next) {
+async function validateUserId(req, res, next) {
   // DO YOUR MAGIC
-  User.getById(req.params.id)
-    .then(possibleUser => {
-      if (possibleUser) {
-        req.user = possibleUser //Appends 'user' To Req
-        next()
-      } else {
-        next({
-          status: 404,
+  try {
+    const user = await User.getById(req.params.id)
+    if (!user) {
+        res.status(404).json({
           message: 'user not found',
         })
-      }
+    } else {
+      req.user = user //Appends 'user' To Req
+        next()
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: 'Problem Finding User'
     })
-    .catch(next)
+  }
 }
 
 const userSchema = yup.object({
-  name: yup.string().unique().required()
+  name: yup.string().required()
 })
 const validateUser = async (req, res, next) => {
   // DO YOUR MAGIC
@@ -50,7 +55,7 @@ const validateUser = async (req, res, next) => {
 }
 
 const postSchema = yup.object({
-  text: yup.text().required()
+  text: yup.string().required()
 })
 const validatePost = async (req, res, next) => {
   // DO YOUR MAGIC

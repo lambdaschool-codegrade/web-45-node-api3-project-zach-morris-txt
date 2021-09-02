@@ -1,6 +1,7 @@
 //Imports
 const express = require('express');
 const cors = require('cors')
+const { logger } = require('./middleware/middleware')
 const usersRouter = require('./users/users-router')
 
 
@@ -11,6 +12,7 @@ const server = express();
 //Middleware Called
 server.use(express.json())
 server.use(cors())
+server.use(logger)
 
 
 //Consuming
