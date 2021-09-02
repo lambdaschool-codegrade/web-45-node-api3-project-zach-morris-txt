@@ -1,10 +1,23 @@
+//Imports
 const express = require('express');
+const Users = require('./users-model')
+const Posts = require('../posts/posts-model')
 
-// You will need `users-model.js` and `posts-model.js` both
-// The middleware functions also need to be required
 
+//Consuming
+const {
+  logger,
+  validateUserId,
+  validateUser,
+  validatePost,
+} = require('../middleware/middleware')
+
+
+//Miniature Instance Of Express Server
 const router = express.Router();
 
+
+//Endpoints
 router.get('/', (req, res) => {
   // RETURN AN ARRAY WITH ALL THE USERS
 });
@@ -41,4 +54,9 @@ router.post('/:id/posts', (req, res) => {
   // and another middleware to check that the request body is valid
 });
 
-// do not forget to export the router
+//Error-Handling Middleware
+
+
+//Exports; Exposing
+module.exports = router;
+

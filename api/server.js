@@ -1,13 +1,27 @@
+//Imports
 const express = require('express');
+const cors = require('cors')
+const usersRouter = require('./users/users-router')
 
+
+//Instance Of Express App; Instantiate
 const server = express();
 
-// remember express by default cannot parse JSON in request bodies
 
-// global middlewares and the user's router need to be connected here
+//Middleware Called
+server.use(express.json())
+server.use(cors())
 
+
+//Consuming
+server.use('/api/users', usersRouter)
+
+
+//Endpoints
 server.get('/', (req, res) => {
   res.send(`<h2>Let's write some middleware!</h2>`);
 });
 
+
+//Exports; Exposing
 module.exports = server;
